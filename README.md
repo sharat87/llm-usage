@@ -19,3 +19,7 @@ Clone the repo, open a coding agent (Claude Code, Codex, …) in it, and ask:
 > Review this code for anything nasty, then set it up if it's safe.
 
 `AGENTS.md` has the setup steps for the agent to follow.
+
+## License
+
+MIT, see `LICENSE`.
