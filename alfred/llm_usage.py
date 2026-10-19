@@ -47,8 +47,6 @@ def human_duration(secs):
 def ring_color(pct):
 	if pct >= 80:
 		return (230, 72, 60, 255)
-	if pct >= 50:
-		return (240, 170, 30, 255)
 	return (10, 132, 255, 255)
 
 
