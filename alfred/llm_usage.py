@@ -105,6 +105,43 @@ def ring_icon(pct):
 	return str(path)
 
 
+def segment_distance(px, py, ax, ay, bx, by):
+	t = max(0, min(1, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)))
+	return math.hypot(px - (ax + t * (bx - ax)), py - (ay + t * (by - ay)))
+
+
+def stroke_icon(name, segments, color):
+	"""Path to a PNG of thick round-ended strokes, drawn once and cached.
+
+	`segments` are ((x1, y1), (x2, y2)) pairs in 0..1 icon coordinates.
+	"""
+	path = ICON_DIR / f"{name}.png"
+	if path.exists():
+		return str(path)
+
+	half_width = ICON_SIZE * 0.07
+	segs = [(ax * ICON_SIZE, ay * ICON_SIZE, bx * ICON_SIZE, by * ICON_SIZE) for (ax, ay), (bx, by) in segments]
+	pixels = []
+	for y in range(ICON_SIZE):
+		for x in range(ICON_SIZE):
+			covered = sum(
+				any(segment_distance(x + (sx + 0.5) / ICON_SS, y + (sy + 0.5) / ICON_SS, *s) <= half_width for s in segs)
+				for sy in range(ICON_SS)
+				for sx in range(ICON_SS)
+			)
+			pixels.append(color[:3] + (round(color[3] * covered / (ICON_SS * ICON_SS)),))
+
+	ICON_DIR.mkdir(parents=True, exist_ok=True)
+	write_png(path, ICON_SIZE, pixels)
+	return str(path)
+
+
+def status_icon(ok):
+	if ok:
+		return stroke_icon("status-ok", [((0.18, 0.52), (0.4, 0.74)), ((0.4, 0.74), (0.82, 0.28))], (40, 190, 80, 255))
+	return stroke_icon("status-failed", [((0.24, 0.24), (0.76, 0.76)), ((0.76, 0.24), (0.24, 0.76))], (230, 72, 60, 255))
+
+
 def until(s, verb, now):
 	if not s:
 		return "no expiry"
@@ -178,6 +215,8 @@ def main():
 			"title": f"Updated {human_duration(age)} ago ({datetime.fromtimestamp(fetched):%H:%M})",
 			"subtitle": f"{result} · Enter opens the log",
 			"arg": str(LOG_FILE),
+			# Stale data counts as a failure too: the numbers above may be out of date.
+			"icon": {"path": status_icon(not failed and age <= STALE_SECS)},
 		})
 	print(json.dumps({"items": items}))
 

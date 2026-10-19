@@ -34,7 +34,7 @@ All three are undocumented and may change; a broken provider shows up as
 `llm_usage.py` is its script filter: one row per limit/credit with a ring-chart icon
 (cached in `~/.cache/llm-usage-icons/`; delete that folder after changing the drawing),
 then a row per failed provider, then an "Updated … ago" row saying whether the last run
-fully succeeded. `info.plist` is Alfred's workflow definition.
+fully succeeded (green check), or failed or is stale (red cross). `info.plist` is Alfred's workflow definition.
 
 Alfred loads it through a symlink:
 `~/Dropbox/AlfredPrefs/Alfred.alfredpreferences/workflows/user.workflow.323D0302-CE58-459A-9217-4F263F8CF3A9 -> ~/labs/llm-usage/alfred`.
