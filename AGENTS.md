@@ -12,7 +12,7 @@ automated tests.
 | --- | --- | --- |
 | Anthropic | `api.anthropic.com/api/oauth/usage` (undocumented, used by Claude Code) | Claude Code OAuth token from the Keychain item `Claude Code-credentials` — never refresh it here |
 | Copilot | `gh api /copilot_internal/user` (undocumented) | `gh` login |
-| DeepInfra | `api.deepinfra.com/payment/checklist` (undocumented); negative `stripe_balance` = credit | `~/lawn/bin/llm-key.sh DEEPINFRA_API_KEY`, run from `~/labs` |
+| DeepInfra | `api.deepinfra.com/payment/checklist` (undocumented); negative `stripe_balance` = credit | Keychain item: service `DEEPINFRA_API_KEY`, account `$USER` |
 
 All three are undocumented and may change; a broken provider shows up as
 `"status": "error"` with the message, and the script exits 1.
