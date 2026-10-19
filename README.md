@@ -2,6 +2,8 @@
 
 Usage limits and credits for Anthropic (Claude subscription), GitHub Copilot and DeepInfra, in one JSON file and one Alfred keyword.
 
+A personal tool, shared as-is. It relies on undocumented endpoints that may change or break at any time.
+
 ![The ll keyword in Alfred](docs/alfred.png)
 
 - `llm-usage` — Python script (stdlib only). Fetches each provider and writes `~/.cache/llm-usage.json`.
