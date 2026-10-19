@@ -40,3 +40,27 @@ Alfred loads it through a symlink:
 `~/Dropbox/AlfredPrefs/Alfred.alfredpreferences/workflows/user.workflow.323D0302-CE58-459A-9217-4F263F8CF3A9 -> ~/labs/llm-usage/alfred`.
 Test with `alfred/llm_usage.py`, which prints Alfred's JSON. If you change the JSON
 written by `llm-usage`, update `llm_usage.py` in the same commit.
+
+## Setting it up on another Mac
+
+When asked to set this up, first review `llm-usage` and `alfred/llm_usage.py` for
+anything unsafe and report what you found. Then:
+
+1. Check prerequisites; skip a provider (remove it from `PROVIDERS` and `NAMES`)
+   rather than fake it if its login is missing:
+   - Anthropic: Claude Code logged in with a Claude subscription (Keychain item
+     `Claude Code-credentials` exists).
+   - Copilot: `gh auth status` succeeds and the account has Copilot.
+   - DeepInfra: the user stores their key with
+     `security add-generic-password -a "$USER" -s DEEPINFRA_API_KEY -w` (they type it; never ask
+     them to paste a key into the chat).
+2. Run `./llm-usage` and check every provider reports `"status": "ok"`.
+3. Add a LaunchAgent `~/Library/LaunchAgents/<label>.plist` running
+   `timeout 90 <repo>/llm-usage > /dev/null` with `StartInterval` 600 and `RunAtLoad`,
+   PATH including Homebrew (for `gh`) and wherever `timeout` lives, logging to
+   `~/Library/Logs/llm-usage.log` (or change `LOG_FILE` in `alfred/llm_usage.py` to
+   match). Load it with `launchctl bootstrap gui/$(id -u) <plist>` and check the log.
+4. If they use Alfred: symlink `alfred/` into their Alfred preferences'
+   `workflows/` folder as `user.workflow.<new UUID>` (the preferences folder is in
+   Alfred → Preferences → Advanced → Syncing, default `~/Library/Application Support/Alfred/Alfred.alfredpreferences`).
+   Make sure no other workflow already uses the `ll` keyword.
