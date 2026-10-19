@@ -22,6 +22,8 @@ All three are undocumented and may change; a broken provider shows up as
 - Minimum that's useful today. Add a provider only when it's actually needed.
 - Stdlib only. Every network call / subprocess has a timeout.
 - Fail loudly per provider; never drop or fake a value.
+- Always commit your work; never leave it uncommitted. Amend the commit for
+  follow-up changes to the same work.
 
 ## Running
 
